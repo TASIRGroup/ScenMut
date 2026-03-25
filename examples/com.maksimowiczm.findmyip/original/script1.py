@@ -17,8 +17,8 @@ options.load_capabilities({
 	"platformName": "Android",
 	"appium:automationName": "uiautomator2",
 	"appium:deviceName": "android",
-	"appium:appPackage": "com.example.myapplication",
-	"appium:appActivity": "com.example.myapplication.MainActivity",
+	"appium:appPackage": "com.maksimowiczm.findmyip",
+	"appium:appActivity": "com.maksimowiczm.findmyip.infrastructure.android.MainActivity",
 	"appium:language": "en",
 	"appium:locale": "US",
 	"appium:serverUrl": "http://localhost:4723",
@@ -30,9 +30,10 @@ options.load_capabilities({
 
 driver = webdriver.Remote("http://127.0.0.1:4723", options=options)
 
-el1 = driver.find_element(by=AppiumBy.XPATH, value='//android.widget.EditText[@resource-id="com.example.myapplication:id/editTextNumber"]')
-el1.send_keys("123")
-el2 = driver.find_element(by=AppiumBy.XPATH, value='//android.widget.EditText[@resource-id="com.example.myapplication:id/editTextNumber2"]')
-el2.send_keys("456")
-el3 = driver.find_element(by=AppiumBy.XPATH, value='//android.widget.Button[@resource-id="com.example.myapplication:id/button"]')
+
+el1 = driver.find_element(by=AppiumBy.XPATH, value='//android.widget.Button')
+el1.click()
+el2 = driver.find_element(by=AppiumBy.XPATH, value='//androidx.compose.ui.platform.ComposeView/android.view.View/android.view.View/android.view.View/android.view.View[2]/android.widget.Button')
+el2.click()
+el3 = driver.find_element(by=AppiumBy.XPATH, value='//androidx.compose.ui.platform.ComposeView/android.view.View/android.view.View/android.view.View/android.view.View[2]/android.widget.Button')
 el3.click()
