@@ -1,0 +1,57 @@
+# environment
+env:
+    emulatorPath: path_to_emulator
+    emulators: 
+        - emulator: your_avd_name   # TODO: Modify this to your actual emulator/device name
+          device_id: your_device_id   # TODO: Modify this to your actual emulator/device id
+
+# Appium configuration
+appium:
+    platformName: Android
+    automationName: uiautomator2
+    deviceName: android
+    appPackage: <auto_generated>
+    appActivity: <auto_generated>
+    language: en
+    locale: US
+    serverUrl: http://localhost:4723
+coverageFile: true
+
+# Graph building configuration
+screenshotDir: <auto_generated>
+graphDir: <auto_generated>
+logDir: <auto_generated>
+delay: 0.5
+sameStateStrategy:
+    type: hash
+belongingStrategy:
+    type: tree_similarity
+    threshold: 0.9
+maxExplorationEpochs: 300
+coverageThreshold: 95
+reset: true
+explorationPreset: snapshot # "snapshot" or "default" or "back_penalty"
+
+# Path Mutation configuration
+scriptDir: your_input_script_path_here  # TODO: Modify this to your actual input script path
+mutation:
+    maxPathLength: 20
+    maxMutations: 20
+    # llm:
+    #   generation_model: complex
+    #   verification_model: complex
+    #   temperature: 0.2
+    # mrState:
+    #   maxCandidates: 10
+    #   subgraphMaxDepth: 5
+    #   subgraphMaxEdges: 50
+    # mrCancel:
+    #   requireReachableInverse: true
+MRs:
+    MRData:
+        enabled: true
+    MRState:
+        enabled: true
+    MRCancel:
+        enabled: true
+outputDir: your_output_path_here  # TODO: Modify this to your actual output path
