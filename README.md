@@ -96,3 +96,7 @@ You can find examples in the [`examples`](./examples) directory. Each subdirecto
 ### Applications Used for Evaluation
 
 Our evaluation uses the applications listed in [`app_info.csv`](./app_info.csv).
+
+### Experiment Detailed Results
+
+Our experiment detailed results can be accessed in listed in [`experiment`](./experiment).
