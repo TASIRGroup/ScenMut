@@ -865,7 +865,7 @@ def build_subgraph_semantic_summary(
         from_s = _state_semantic_and_snapshot(src)
         to_s = _state_semantic_and_snapshot(tgt)
         ev_s = _event_semantic(event)
-        desc = f"从[{from_s}] 经由 [{ev_s}] 可到达 [{to_s}]"
+        desc = f"From [{from_s}] via [{ev_s}] to [{to_s}]"
         result.append((eid, desc))
     return result
 
