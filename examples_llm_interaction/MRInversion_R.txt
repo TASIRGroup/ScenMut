@@ -1,0 +1,37 @@
+[Scenario]
+Find a suitable inverse operation of creating and saving a new note in a note-taking app. 
+--------------------
+[Input]
+You are a mobile application testing expert. The path may contain operations with data side effects (e.g. add, modify). For each, match a semantic inverse operation (e.g. delete, cancel) and judge whether data can roll back to the pre-operation state after the inverse. If no pair exists, output an empty list.
+
+**Semantic labels of events on the path**: ["click_add_note", "input_title", "click_save_note"]
+**Data entity summary per state where each event occurs**: [...]
+**Candidate inverse operations (semantic labels) in the graph**: ["click_delete_note", "click_edit_note", "click_back_button", "click_share"]
+
+Output pairs of forward operations and inverse operations that can be paired. A pair is only used for injection when rollback_feasible is true.
+Output strictly in the following JSON format (no other text):
+{
+  "pairs": [
+    {
+      "forward": "forward event semantic label",
+      "inverse": "inverse operation semantic label",
+      "rollback_feasible": true or false,
+      "reason": "short reason"
+    }
+  ]
+}
+--------------------
+[Output]
+{
+  "pairs": [
+    {
+      "forward": "click_save_note",
+      "inverse": "click_delete_note",
+      "rollback_feasible": true,
+      "reason": "Deleting a newly saved note semantically reverts the state of the note list back to its condition before the addition."
+    }
+  ]
+}
+--------------------
+[Result Explanation]
+The Generation LLM correctly identifies that "click_save_note" acts as a data-modifying forward event. It scans the candidate inverse labels from the SEM-HFSM graph and pairs it with "click_delete_note", determining that a rollback is logically feasible for this pair.

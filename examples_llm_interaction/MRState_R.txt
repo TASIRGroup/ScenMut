@@ -1,0 +1,78 @@
+[Scenario]
+Injecting sub-scenarios between 'enter note title' and 'click save'
+--------------------
+[Input]
+You are a mobile application testing expert. On a test path, the current step
+intent is **intent_k** and the next step intent is **intent_k_plus_1**. Plan
+several "sub-scenario paths" between them. Each path is a sequence of
+natural-language step intents; every step must correspond to one of the edge
+identifiers (edge_id) below so the system can map your output to real paths
+in the graph.
+
+**Insertion context**
+- Current step intent (leaving A): enter note title text
+- Next step intent (entering B): click save note button
+
+**Local candidate subgraph edge list** (you may only compose paths from
+these edges; each has a unique identifier):
+Edge E1: From [Note Creation Form] via [Clicked （xpath: //android.widget.EditText[@resource-id="com.example.notes:id/note_content_input"]）（The semantic label of this operation is: click_content_input_field）] to [Note Content Editor]
+Edge E2: From [Note Content Editor] via [Entered text 'test' （xpath: //android.widget.EditText[@resource-id="com.example.notes:id/note_content_input"]）（The semantic label of this operation is: enter_note_content_text）] to [Note Content Editor]
+Edge E3: From [Note Content Editor] via [Clicked （xpath: //android.widget.Button[@resource-id="com.example.notes:id/add_tags_button"]）（The semantic label of this operation is: click_add_tags_button）] to [Tag Selection Sheet]
+Edge E4: From [Tag Selection Sheet] via [Clicked （xpath: //android.widget.Button[@resource-id="com.example.notes:id/confirm_tag_selection"]）（The semantic label of this operation is: select_tag_and_confirm）] to [Note Content Editor]
+Edge E5: From [Note Content Editor] via [Clicked （xpath: //android.widget.ImageButton[@resource-id="com.example.notes:id/back_to_title_button"]）（The semantic label of this operation is: click_back_to_title_button）] to [Note Creation Form]
+
+**Requirements**
+1. Produce 0–10 distinct "intent sequences". Each sequence has 1–6
+   natural-language steps; use arrows to show order between steps.
+2. Every step in a sequence must match some edge_id above (e.g. E1, E2),
+   and the sequence must be connected on the graph.
+3. Paths should be semantically plausible and match user habits.
+4. Diversify (e.g. open settings -> change avatar -> save; browse product
+   -> add to cart -> view cart).
+5. Paths should preferably help surface potential defects.
+
+Output **only** JSON, no other text. Format:
+{
+  "intent_sequences": [
+    [
+      { "description": "natural-language step description", "edge_id": "Enumber" },
+      ...
+    ],
+    ...
+  ]
+}
+--------------------
+[Output]
+{
+  "intent_sequences": [
+    [
+      { "description": "Click into the content input field to start editing",
+        "edge_id": "E1" },
+      { "description": "Type note body content in the editor",
+        "edge_id": "E2" }
+    ],
+    [
+      { "description": "Click into the content input field",
+        "edge_id": "E1" },
+      { "description": "Open the tag selection sheet",
+        "edge_id": "E3" },
+      { "description": "Select a tag and confirm",
+        "edge_id": "E4" }
+    ],
+    [
+      { "description": "Click into the content input field",
+        "edge_id": "E1" },
+      { "description": "Type note body content",
+        "edge_id": "E2" },
+      { "description": "Open the tag selection sheet",
+        "edge_id": "E3" },
+      { "description": "Select a tag and confirm",
+        "edge_id": "E4" }
+    ]
+  ]
+}
+--------------------
+[Result Explanation]
+Sequence 1 (E1→E2): add body content only —> tests that note body persists correctly.
+Sequence 2 (E1→E3→E4): add tag without body —> tests saving with metadata but no content.
+Sequence 3 (E1→E2→E3→E4): add body then tag —> tests joint persistence of content and tags; most comprehensive.

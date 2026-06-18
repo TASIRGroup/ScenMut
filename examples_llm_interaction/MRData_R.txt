@@ -1,0 +1,60 @@
+[Scenario]
+Mutating the 'note_title' field on the Note Creation Form page
+--------------------
+[Input]
+You are a mobile application testing expert. Based on the current page intent
+and input semantics, generate semantically equivalent mutated values for input
+fields for metamorphic testing.
+
+**Current page intent**: Note Creation Form
+**Input semantics / field name**: note_title
+**Action event semantic label**: enter note title text
+**Current value**: Meeting Notes
+**Field type**: text
+**Required or not**: required
+
+Produce semantically valid, testable mutated values. Strategies include:
+equivalent-class substitution, boundary values, special characters, substring
+replacement. You may give one representative value per strategy.
+Requirements: do not generate empty values for required fields; do not generate
+non-numeric values for numeric fields.
+
+Output strictly in the following JSON format (no other text):
+{
+  "variants": [
+    { "value": "<string value>", "strategy": "equivalent_class" },
+    { "value": "<string value>", "strategy": "boundary" },
+    { "value": "<string value>", "strategy": "special_char" },
+    { "value": "<string value>", "strategy": "substring" }
+  ]
+}
+strategy must be one of: equivalent_class, boundary, special_char, substring.
+If a strategy does not apply, you may omit it, but return at least one variant.
+--------------------
+[Output]
+{
+  "variants": [
+    {
+      "value": "Project Summary",
+      "strategy": "equivalent_class"
+    },
+    {
+      "value": "A",
+      "strategy": "boundary"
+    },
+    {
+      "value": "Meeting & Notes #2025!",
+      "strategy": "special_char"
+    },
+    {
+      "value": "Notes",
+      "strategy": "substring"
+    }
+  ]
+}
+--------------------
+[Result Explanation]
+equivalent_class: 'Project Summary' — semantically equivalent title of the same type
+boundary: 'A' — single-character minimum-length value for a required text field
+special_char: 'Meeting & Notes #2025!' — title with special characters to test display and storage
+substring: 'Notes' — substring of the original value; tests partial-match display and search

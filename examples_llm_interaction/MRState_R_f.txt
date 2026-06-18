@@ -1,0 +1,96 @@
+[Scenario]
+Side-effect inference after injecting Sequence 3 (content + tag)
+--------------------
+[Input]
+You are a mobile application testing expert. On a test path, a sub-scenario
+[intent_new_1, ..., intent_new_j] was injected between intent_k and intent_{k+1},
+with key events and data changes inside the sub-scenario. Infer which fields in
+subsequent states are affected after injection and their new expected values.
+
+**Current step intent**: enter note title text
+**Next step intent**: click save note button
+**Injected sub-scenario intent list**:
+[
+  "Click into the content input field to start editing",
+  "Type note body content in the editor",
+  "Open the tag selection sheet",
+  "Select a tag and confirm"
+]
+**Summary of key events and data changes in the sub-scenario**: [...]
+**Subsequent states and data entities (includes path_index; each item has at
+least path_index, data_entities[...])**:
+[
+  {
+  	"mutated_state_id": 17,
+    "path_index": 5,
+    "state_intent": "Note List",
+    "data_entities": [
+      { "key": "listed_note_title",   "type": "output",
+        "value": "Meeting Notes" },
+      { "key": "listed_note_preview", "type": "output",
+        "value": "" },
+      { "key": "listed_note_tags",    "type": "output",
+        "value": [] }
+    ]
+  },
+  {
+  	"mutated_state_id": 18,
+    "path_index": 6,
+    "state_intent": "Note Detail",
+    "data_entities": [
+      { "key": "detail_title",   "type": "output",
+        "value": "Meeting Notes" },
+      { "key": "detail_content", "type": "output",
+        "value": "" },
+      { "key": "detail_tags",    "type": "output",
+        "value": [] }
+    ]
+  }
+]
+
+Output fields affected by the injection and their new expected values.
+Output strictly in the following JSON format (no other text):
+{
+  "effects": [
+    {
+      "field_key": "field_key_1",
+      "path_index": 3,
+      "expected_value": "new_expected_value_1"
+    },
+    ...
+  ]
+}
+If no fields are affected, output: {"effects": []}
+--------------------
+[Output]
+{
+  "effects": [
+    {
+      "field_key": "listed_note_preview",
+      "path_index": 5,
+      "expected_value": "Q3 review agenda"
+    },
+    {
+      "field_key": "listed_note_tags",
+      "path_index": 5,
+      "expected_value": ["Work"]
+    },
+    {
+      "field_key": "detail_content",
+      "path_index": 6,
+      "expected_value": "Q3 review agenda"
+    },
+    {
+      "field_key": "detail_tags",
+      "path_index": 6,
+      "expected_value": ["Work"]
+    }
+  ]
+}
+--------------------
+[Result Explanation]
+listed_note_preview (path_index 5): the list item should show a content preview — was empty '' before injection.
+listed_note_tags (path_index 5): tag badge should appear in the list — was [] before injection.
+detail_content (path_index 6): note detail body must display the entered text.
+detail_tags (path_index 6): tag must appear in the detail view.
+listed_note_title and detail_title are not affected by a content/tag injection → correctly excluded.

@@ -1,0 +1,75 @@
+[Scenario]
+Side-effect inference after title mutated to 'Meeting & Notes #2025!'
+--------------------
+[Input]
+You are a mobile application testing expert. An input mutation is known: on a page
+with data entities, input changed from v to v'. Infer which data fields in
+subsequent states will change because of this input mutation, and their new expected values.
+
+**Page intent**: Note Creation Form
+**State/event where mutation occurred**: s2 / enter note title text
+**Input field identifier**: note_title
+**Mutation**: v = "Meeting Notes" -> v' = "Meeting & Notes #2025!"
+**Subsequent states and data entities per state (includes path_index; each item
+has at least path_index, data_entities[...])**:
+[
+  {
+  	"mutated_state_id": 13,
+    "path_index": 3,
+    "state_intent": "Note List",
+    "data_entities": [
+      { "key": "listed_note_title", "type": "output",
+        "value": "Meeting Notes" },
+      { "key": "note_count",        "type": "output",
+        "value": "1" }
+    ]
+  },
+  {
+  	"mutated_state_id": 14,
+    "path_index": 4,
+    "state_intent": "Note Detail",
+    "data_entities": [
+      { "key": "detail_title",   "type": "output",
+        "value": "Meeting Notes" },
+      { "key": "detail_content", "type": "output",
+        "value": "" }
+    ]
+  }
+]
+
+Output fields that will change due to this input mutation and their new expected
+values. Analyze all data entities carefully, understand their meaning, and include
+only fields you are reasonably confident will change—do not guess.
+Output strictly in the following JSON format (no other text):
+{
+  "effects": [
+    {
+      "field_key": "field_key_1",
+      "path_index": 3,
+      "expected_value": "new_expected_value_1"
+    },
+    ...
+  ]
+}
+If no fields change, output: {"effects": []}
+--------------------
+[Output]
+{
+  "effects": [
+    {
+      "field_key": "listed_note_title",
+      "path_index": 3,
+      "expected_value": "Meeting & Notes #2025!"
+    },
+    {
+      "field_key": "detail_title",
+      "path_index": 4,
+      "expected_value": "Meeting & Notes #2025!"
+    }
+  ]
+}
+--------------------
+[Result Explanation]
+listed_note_title (path_index 3): the mutated title must be displayed in the note list: hard-coded assertion 'Meeting Notes' would have been a false positive here.
+detail_title (path_index 4): same propagation path, the note detail view must also show the mutated title.
+note_count and detail_content are unchanged by the title mutation: correctly excluded.
